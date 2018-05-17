@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Directions service</title>
+    <link rel="stylesheet" href="main.css">
+  </head>
+  <body>
+    <div>
+        <form id="informelugar">
+            <label>Nome da Pessoa</label>
+            <input type="text" id="name">
+            <label>Sigla do Estado</label>
+            <input type="text" id="estado">
+            <label>Cidade</label>
+            <input type="text" id="cidade">
+            <label>Rua</label>
+            <input type="text" id="rua">
+            <label>Numero da casa</label>
+            <input type="text" id="numero">
+            <input type="submit" value="Adicionar Localização">
+        </form>
+    </div>
+    <div id="floating-panel">
+    <b>Start: </b>
+    <select id="start">
+        <option value="R. visc do rio branco, 1032 rio grande, rs">Casa do meu Amorzão</option>
+        <option value="R. veiga cabral, 7 rio grande, rs">Casa do Adrian</option>
+        <option value="bage, rs">Bagé</option>
+    </select>
+    <b>End: </b>
+    <select id="end">
+        <option value="R. visconde do rio branco, 1032 rio grande, rs">Casa do meu Amorzão</option>
+        <option value="R. veiga cabral, 7 rio grande, rs">Casa do Adrian</option>
+        <option value="bage, rs">Bagé</option>
+    </select>
+    </div>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 7,
+          center: {lat: -32.04064, lng: -52.088499}
+        });
+        directionsDisplay.setMap(map);
+
+        var onChangeHandler = function() {
+          calculateAndDisplayRoute(directionsService, directionsDisplay);
+        };
+        document.getElementById('start').addEventListener('change', onChangeHandler);
+        document.getElementById('end').addEventListener('change', onChangeHandler);
+      }
+
+      function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+        directionsService.route({
+          origin: document.getElementById('start').value,
+          destination: document.getElementById('end').value,
+          travelMode: 'DRIVING'
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCilcBXCZtp5cN7bHgc9u9VzWDKtgZAkYE&callback=initMap">
+    </script>
+    <script src="main.js"></script>
+  </body>
+</html>
